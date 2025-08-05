@@ -1,0 +1,21 @@
+def contains(self, string: str, symbol: str) -> bool:
+    res = False
+    try:
+        res = string.index(symbol) > -1
+    except ValueError:
+        pass
+    return res 
+ 
+
+string.index("") всегда возвращает 0 для любой строки 
+Пустой символ — это некорректный ввод
+
+Правильный вид функции 
+def contains(self, string: str, symbol: str) -> bool:
+    if symbol == "":
+        return False
+    try:
+        return string.index(symbol) > -1
+    except ValueError:
+        return False
+
