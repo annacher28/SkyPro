@@ -28,7 +28,8 @@ input_field3 = WebDriverWait(driver, 10).until(
 ) 
 input_field3.click()
 
-print("You logged into a secure area!")
+element = driver.find_element(By.CSS_SELECTOR, ".flash.success")
+print(element.text)
 
 sleep(2)
 driver.quit()
