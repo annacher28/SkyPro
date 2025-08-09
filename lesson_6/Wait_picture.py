@@ -1,4 +1,3 @@
-from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,5 +21,5 @@ third_img = driver.find_elements(By.CSS_SELECTOR, "#image-container img")[2]
 print(third_img.get_attribute("src"))
 
 
-sleep(2)  
+  
 driver.quit()
