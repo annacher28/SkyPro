@@ -1,4 +1,3 @@
-from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
@@ -21,13 +20,10 @@ driver.find_element(By.XPATH, "//span[text()='+']").click()
 driver.find_element(By.XPATH, "//span[text()='8']").click()
 driver.find_element(By.XPATH, "//span[text()='=']").click()
 
-result = WebDriverWait(driver, 46).until(  # 46 секунд на всякий случай
+result = WebDriverWait(driver, 46).until( 
     EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
 )
 assert result, "Результат 15 не отобразился за 45 секунд"
-
-
-sleep(5)
 
 
 driver.quit()
