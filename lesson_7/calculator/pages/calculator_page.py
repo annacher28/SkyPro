@@ -1,6 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -32,22 +29,3 @@ class CalculatorPage:
             EC.text_to_be_present_in_element(self.screen, "15")
         )
         return self.driver.find_element(*self.screen).text
-
-def test_calculator():
-    driver = webdriver.Chrome(
-        service=ChromeService(ChromeDriverManager().install()))
-    
-    try:
-        calculator = CalculatorPage(driver)
-        (calculator.open()
-            .set_delay("45")
-            .click_button("7")
-            .click_button("+")
-            .click_button("8")
-            .click_button("="))
-            
-        result = calculator.get_result(46)
-        assert result == "15", "Результат 15 не отобразился за 45 секунд"
-    
-    finally:
-        driver.quit()
