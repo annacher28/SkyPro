@@ -1,6 +1,6 @@
 import requests
 
-key ="AQGe8AOFoItt0VVs6FD0eeSupn9dHO0bJFS3Xx9L6YgJDCjIk-nVHre2N+92D0MS"
+key ="Подставить"
 Base_url = "https://ru.yougile.com/api-v2/projects"
 headers = {
     "Content-Type": "application/json",
