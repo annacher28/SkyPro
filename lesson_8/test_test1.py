@@ -1,73 +1,39 @@
 import requests
 
-key ="Подставить"
-Base_url = "https://ru.yougile.com/api-v2/projects"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {key}"
-}
+BASE_URL = "https://ru.yougile.com/api-v2/projects"
+KEY = "AQGe8AOFoItt0VVs6FD0eeSupn9dHO0bJFS3Xx9L6YgJDCjIk-nVHre2N+92D0MS"
+HEADERS = {"Content-Type": "application/json", "Authorization": f"Bearer {KEY}"}
 
-#Позитивные проверки
-#1
-payload = {
-    "title": "Новый проект",
-    "users": {"80bb24a0-f242-4500-955a-60b3da5660df": "admin"}
-}
+def test_create_positive():
+    payload = {"title": "Новый проект", "users": {"80bb24a0-f242-4500-955a-60b3da5660df": "admin"}}
+    response = requests.post(BASE_URL, json=payload, headers=HEADERS)
+    assert response.status_code == 201
+    return response.json().get('id')
 
-response = requests.request("POST", Base_url, json=payload, headers=headers)
+def test_get_positive():
+    project_id = test_create_positive()
+    response = requests.get(f"{BASE_URL}/{project_id}", headers=HEADERS)
+    assert response.status_code == 200
 
-print(response.text)
+def test_update_positive():
+    project_id = test_create_positive()
+    payload = {"deleted": True, "title": "ГосУслуги", "users": {"80bb24a0-f242-4500-955a-60b3da5660df": "admin"}}
+    response = requests.put(f"{BASE_URL}/{project_id}", json=payload, headers=HEADERS)
+    assert response.status_code == 200
 
-assert response.status_code == 201
+def test_create_negative():
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {KEY}"}
+    payload = {"title": "Новый проект", "users": {"": "admin"}}
+    response = requests.post(BASE_URL, json=payload, headers=headers)
+    assert response.status_code == 400
 
-#2
-response = requests.request("GET", Base_url + '/4cbb973c-7340-443d-a0d0-08c591da42ae', headers=headers)
+def test_get_negative():
+    project_id = "test_id"
+    response = requests.get(f"{BASE_URL}/{project_id}")
+    assert response.status_code == 401
 
-print(response.text)
-
-assert response.status_code == 200
-
-#3
-payload = {
-    "deleted": True,
-    "title": "ГосУслуги",
-    "users": {"80bb24a0-f242-4500-955a-60b3da5660df": "admin"}
-}
-
-response = requests.request("PUT", Base_url + '/a70f69b6-a7bb-47a4-b10d-b0d33c12903b', json=payload, headers=headers)
-
-print(response.text)
-
-assert response.status_code == 200
-
-#Негативные проверки
-#1
-response = requests.request("POST", Base_url, json=payload, headers=headers)
-
-print(response.text)
-
-assert response.status_code == 400
-#2
-headers = {
-    "Content-Type": "application/json"
-}
-
-response = requests.request("GET", Base_url + '/a70f69b6-a7bb-47a4-b10d-b0d33c12903b', headers=headers)
-
-print(response.text)
-
-assert response.status_code == 401
-#3
-payload = {
-    "deleted": True,
-    "users": {"80bb24a0-f242-4500-955a-60ba5660df": "admin"}
-}
-headers = {
-    "Authorization": f"Bearer {key}"
-}
-
-response = requests.request("PUT", Base_url + '/a70f69b6-a7bb-47a4-b10d-b0d33c12903b')
-
-print(response.text)
-
-assert response.status_code == 401
+def test_update_negative():
+    project_id = "test_id"
+    payload = {"deleted": True, "users": {"80bb24a0-f242-4500-955a-60ba5660df": "admin"}}
+    response = requests.put(f"{BASE_URL}/{project_id}", json=payload)
+    assert response.status_code == 401
